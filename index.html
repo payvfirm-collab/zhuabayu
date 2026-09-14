@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>zhuabayu</title>
+  <meta name="description" content="zhuabayu">
+  <style>
+    :root{
+      color-scheme: light dark;
+      --page:#ffffff;
+    }
+
+    @media (prefers-color-scheme: dark){
+      :root{ --page:#0b0b0d; }
+    }
+
+    *{box-sizing:border-box}
+
+    html,body{
+      margin:0;
+      min-height:100%;
+      background:var(--page);
+    }
+
+    body{
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Helvetica Neue",
+        "PingFang SC",
+        "Microsoft YaHei",
+        Arial,
+        sans-serif;
+    }
+
+    .stage{
+      width:100vw;
+      aspect-ratio:16/6;
+      position:relative;
+      overflow:hidden;
+      background:#d9d9dd;
+      isolation:isolate;
+    }
+
+    .wallpaper{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.90;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .wash{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      background:rgba(255,255,255,.04);
+      pointer-events:none;
+    }
+
+    @media (prefers-color-scheme: dark){
+      .wash{ background:rgba(0,0,0,.06); }
+    }
+
+    .copy{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:5vw;
+      pointer-events:none;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(70px, 11.5vw, 190px);
+      line-height:.82;
+      font-weight:600;
+      letter-spacing:-.065em;
+      color:#fff;
+      text-shadow:0 3px 30px rgba(0,0,0,.20);
+    }
+
+    .tip-wrap{
+      margin-top:22px;
+      min-height:1.4em;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .tip{
+      margin:0;
+      font-size:clamp(9px, .78vw, 13px);
+      font-weight:450;
+      letter-spacing:.055em;
+      color:rgba(255,255,255,.92);
+      text-shadow:0 1px 12px rgba(0,0,0,.24);
+      transition:opacity .45s ease, transform .45s ease;
+      max-width:min(78vw, 1100px);
+      white-space:normal;
+      text-wrap:balance;
+    }
+
+    .tip.out{
+      opacity:0;
+      transform:translateY(4px);
+    }
+
+    @media (max-width:700px){
+      h1{ font-size:clamp(44px, 14vw, 92px); }
+      .tip{ font-size:8px; letter-spacing:.035em; }
+      .tip-wrap{ margin-top:10px; }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .tip{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="zhuabayu">
+    <img
+      class="wallpaper"
+      src="https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN"
+      alt=""
+      referrerpolicy="no-referrer"
+    >
+
+    <div class="wash"></div>
+
+    <section class="copy">
+      <h1>zhuabayu</h1>
+      <div class="tip-wrap">
+        <p class="tip" id="tip">看起来更简单。实际上，远不止如此。</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const tips = [
+      "当熟悉的事物换一种方式出现，新的体验也会随之发生。",
+      "有些改变看起来微不足道，却会让之后的一切显得完全不同。",
+      "把更多可能藏在更少的动作里，让复杂自然消失在视线之外。",
+      "今天的风景不会重复。明天，也不需要。",
+      "我们重新想象了一次留白，只为了让你少想一点，多看一点。",
+      "当一切都刚刚好，你甚至不会意识到背后发生了多少事情。",
+      "这不是一次更新。只是让熟悉的东西，变得更像它本来应该的样子。",
+      "有时候，真正重要的变化，恰恰是那些你不会注意到的变化。",
+      "让每一次打开都足够熟悉，又足够不同。",
+      "如果一个页面不需要解释，那也许它已经解释得足够清楚。",
+      "重新定义今天，从一张不同的画面开始。",
+      "我们没有增加更多内容，只是让每一处留白都有了自己的理由。",
+      "让复杂止步于幕后，把直觉留在你面前。",
+      "看起来更简单。实际上，远不止如此。",
+      "不必寻找变化。它会自己找到你。",
+      "有些体验不会告诉你该做什么，因为它已经知道什么不需要做。",
+      "一切都在发生，而你只需要看见结果。",
+      "每天都会有一点不同。不同，也可以如此自然。",
+      "少一点选择，多一点刚刚好。",
+      "把今天放进一张图里，其余的交给时间。",
+      "我们重新思考了什么叫做‘什么都没有’，然后留下了更多东西。",
+      "如果你没有注意到设计本身，那也许设计已经完成了它的工作。",
+      "每一次刷新，都像是同一个地方第一次出现。",
+      "没有更多按钮。也没有更少可能。",
+      "熟悉，第一次变得有点陌生。陌生，也第一次这么熟悉。",
+      "一些东西被拿走了，于是更多东西开始出现。",
+      "为了让你少做一点，我们做了更多。",
+      "真正自然的体验，不需要你记住它是如何工作的。",
+      "当细节安静下来，画面会开始说话。",
+      "这不是为了让你停下来。只是让停下来这件事更值得。",
+      "新的风景已经准备好了。你不需要准备。",
+      "我们让页面每天改变一次，却尽量让你什么都不用改变。",
+      "看见今天。就是今天。",
+      "有些瞬间只会出现一次，所以我们什么都没有多加。",
+      "不为了更快，不为了更多，只为了刚刚好。",
+      "一个页面。每天一次。除此之外，什么都可以发生。",
+      "我们把复杂重新放回它应该待的地方：你看不见的地方。",
+      "每一天都值得一张新的画面。至少这里这么认为。",
+      "少一点干扰，多一点你真正想看的东西。",
+      "这一次，我们什么也没有重新发明。只是重新看了一遍。",
+      "下一次打开，还是这里。也已经不是这里。",
+      "如果一切都显得理所当然，那正是我们想要的结果。",
+      "设计并不总是关于增加什么。有时，它只是知道什么时候停下来。",
+      "每天一张新画面。听起来很简单。也确实应该如此。",
+      "我们没有改变你打开页面的方式，只改变了页面迎接你的方式。",
+      "现在，留白也有了自己的内容。",
+      "同一个名字，不同的一天。",
+      "每一次出现，都只属于这一次。",
+      "把屏幕还给风景，把风景还给今天。",
+      "不是为了让你多看，而是让每一眼都更值得。",
+      "看似没有发生什么。其实这正是它发生的方式。",
+      "今天更新了。什么都不用做。",
+      "新的画面，旧的习惯。刚好。",
+      "如果背景很好看，这次我们愿意把功劳留给风景。",
+      "这里没有下一步。只有下一次。",
+      "欢迎来到 zhuabayu。今天，它又有一点不一样。"
+    ];
+
+    const tip = document.getElementById("tip");
+    let last = -1;
+
+    function nextTip(){
+      let i;
+      do {
+        i = Math.floor(Math.random() * tips.length);
+      } while (i === last && tips.length > 1);
+
+      tip.classList.add("out");
+
+      setTimeout(() => {
+        tip.textContent = tips[i];
+        last = i;
+        tip.classList.remove("out");
+      }, 430);
+    }
+
+    setInterval(nextTip, 5200);
+  </script>
+</body>
+</html>
